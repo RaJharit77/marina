@@ -1,18 +1,18 @@
 FROM ocaml/opam:ubuntu-ocaml-4.14
 
-# Installer les dépendances
+# Installation des dépendances
 RUN sudo apt-get update && \
     sudo apt-get install -y m4 && \
     sudo rm -rf /var/lib/apt/lists/*
 
-# Créer et configurer le répertoire de travail
+# Création et configuration du répertoire de travail
 RUN sudo mkdir -p /app && sudo chown -R opam:opam /app
 WORKDIR /app
 
-# Copier les fichiers et fixer les permissions
+# Copie les fichiers et fixe les permissions
 COPY --chown=opam:opam . /app
 
-# Installer les dépendances OPAM et initialiser l'environnement
+# Installation des dépendances OPAM et initialisation de l'environnement
 RUN opam install -y ounit ocamlfind && \
     opam init -y --disable-sandboxing && \
     eval $(opam env)
