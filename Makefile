@@ -5,7 +5,7 @@ CAMLC = ocamlfind ocamlc
 PACKAGES = -package cohttp-lwt-unix,lwt.unix,str
 CUSTOM = -custom
 
-all: depend $(EXEC)
+all: .depend $(EXEC)
 
 OBJS = $(SOURCES:.ml=.cmo)
 
@@ -23,22 +23,19 @@ $(EXEC): $(OBJS)
 doc: all
 	mkdir -p doc
 	rm -rf doc/*
-	$(CAMLDOC) -d doc/ -html *.mli
+	ocamldoc -d doc/ -html *.mli
 
 clean:
 	rm -f *.cm[io] *~ .*~ #*#
 	rm -f $(EXEC)
 	rm -rf doc
-	rm .depend
+	rm -f .depend
 
 test:
 	ocamlfind ocamlc -package ounit2 -linkpkg -o test str.cma my.ml prop.ml sat_ifexpr.ml marina.ml test.ml
 	./test
 
-depend: $(SOURCES)
-	$(CAMLDEP) my.mli prop.mli sat_ifexpr.mli marina.mli my.ml prop.ml sat_ifexpr.ml marina.ml main.ml > .depend
+.depend: my.mli prop.mli sat_ifexpr.mli marina.mli my.ml prop.ml sat_ifexpr.ml marina.ml main.ml
+	ocamldep $^ > .depend
 
-depend: $(SOURCES)
-	$(CAMLDEP) my.mli prop.mli sat_ifexpr.mli marina.mli my.ml prop.ml sat_ifexpr.ml marina.ml main.ml > .depend
-
-include .depend
+-include .depend
