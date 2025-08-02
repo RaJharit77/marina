@@ -8,7 +8,7 @@ RUN sudo mkdir -p /app && sudo chown -R opam:opam /app
 WORKDIR /app
 COPY --chown=opam:opam . /app
 
-RUN opam install -y ounit ocamlfind && \
+RUN opam install -y ounit ocamlfind cohttp-lwt-unix lwt && \
     opam init -y --disable-sandboxing && \
     eval $(opam env)
 
@@ -17,4 +17,4 @@ RUN eval $(opam env) && make
 
 EXPOSE 10000
 
-CMD ["./marina", "a & b"]
+CMD ["./marina"]

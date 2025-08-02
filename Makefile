@@ -1,11 +1,11 @@
 SOURCES = my.ml prop.ml sat_ifexpr.ml marina.ml main.ml
 EXEC = marina
 
-CAMLC = ocamlc
+CAMLC = ocamlfind ocamlc
 CAMLDEP = ocamldep
 CAMLDOC = ocamldoc
 
-LIBS = str.cma
+LIBS = -package str,cohttp-lwt-unix,lwt -linkpkg
 CUSTOM = -custom
 
 all: depend $(EXEC)
