@@ -1,41 +1,47 @@
 SOURCES = my.ml prop.ml sat_ifexpr.ml marina.ml main.ml
 EXEC = marina
 
-CAMLC = ocamlfind ocamlc
-PACKAGES = -package cohttp-lwt-unix,lwt.unix,str
+CAMLC = ocamlc
+CAMLDEP = ocamldep
+CAMLDOC = ocamldoc
+
+LIBS = str.cma
 CUSTOM = -custom
 
-all: .depend $(EXEC)
+all: depend $(EXEC)
 
 OBJS = $(SOURCES:.ml=.cmo)
 
 $(EXEC): $(OBJS)
-	$(CAMLC) $(CUSTOM) -o $(EXEC) $(PACKAGES) -linkpkg $(OBJS)
+	$(CAMLC) $(CUSTOM) -o $(EXEC) $(LIBS) $(OBJS)
 
 .SUFFIXES: .ml .mli .cmo .cmi
 
 %.cmo: %.ml
-	$(CAMLC) -c $(PACKAGES) $<
+	$(CAMLC) -c $<
 
 %.cmi: %.mli
-	$(CAMLC) -c $(PACKAGES) $<
+	$(CAMLC) -c $<
 
 doc: all
 	mkdir -p doc
 	rm -rf doc/*
-	ocamldoc -d doc/ -html *.mli
+	$(CAMLDOC) -d doc/ -html *.mli
 
 clean:
 	rm -f *.cm[io] *~ .*~ #*#
 	rm -f $(EXEC)
 	rm -rf doc
-	rm -f .depend
+	rm .depend
 
 test:
 	ocamlfind ocamlc -package ounit2 -linkpkg -o test str.cma my.ml prop.ml sat_ifexpr.ml marina.ml test.ml
 	./test
 
-.depend: my.mli prop.mli sat_ifexpr.mli marina.mli my.ml prop.ml sat_ifexpr.ml marina.ml main.ml
-	ocamldep $^ > .depend
+.depend: $(SOURCES)
+	$(CAMLDEP) *.mli *.ml > .depend
 
--include .depend
+depend: $(SOURCES)
+	$(CAMLDEP) *.mli *.ml > .depend
+
+include .depend
