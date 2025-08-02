@@ -5,7 +5,7 @@ CAMLC = ocamlfind ocamlc
 CAMLDEP = ocamldep
 CAMLDOC = ocamldoc
 
-LIBS = -package str,cohttp-lwt-unix,lwt -linkpkg
+LIBS = -package cohttp-lwt-unix,lwt.unix,str -linkpkg
 CUSTOM = -custom
 
 all: depend $(EXEC)
@@ -13,7 +13,7 @@ all: depend $(EXEC)
 OBJS = $(SOURCES:.ml=.cmo)
 
 $(EXEC): $(OBJS)
-	$(CAMLC) $(CUSTOM) -o $(EXEC) $(LIBS) $(OBJS)
+	$(CAMLC) $(CUSTOM) $(LIBS) -o $(EXEC) $(OBJS)
 
 .SUFFIXES: .ml .mli .cmo .cmi
 
