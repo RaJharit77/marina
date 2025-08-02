@@ -35,10 +35,10 @@ test:
 	ocamlfind ocamlc -package ounit2 -linkpkg -o test str.cma my.ml prop.ml sat_ifexpr.ml marina.ml test.ml
 	./test
 
-.depend: $(SOURCES)
-	$(CAMLDEP) *.mli *.ml > .depend
+depend: $(SOURCES)
+	$(CAMLDEP) my.mli prop.mli sat_ifexpr.mli marina.mli my.ml prop.ml sat_ifexpr.ml marina.ml main.ml > .depend
 
 depend: $(SOURCES)
-	$(CAMLDEP) *.mli *.ml > .depend
+	$(CAMLDEP) my.mli prop.mli sat_ifexpr.mli marina.mli my.ml prop.ml sat_ifexpr.ml marina.ml main.ml > .depend
 
 include .depend

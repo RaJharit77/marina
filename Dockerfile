@@ -11,7 +11,7 @@ COPY --chown=opam:opam . .
 RUN opam install -y cohttp-lwt-unix lwt ounit
 
 USER opam
-RUN eval $(opam env) && opam exec -- make
+RUN eval $(opam env) && make
 
 EXPOSE 10000
 
