@@ -2,10 +2,7 @@ SOURCES = my.ml prop.ml sat_ifexpr.ml marina.ml main.ml
 EXEC = marina
 
 CAMLC = ocamlfind ocamlc
-CAMLDEP = ocamldep
-CAMLDOC = ocamldoc
-
-LIBS = -package cohttp-lwt-unix,lwt.unix,str -linkpkg
+PACKAGES = -package cohttp-lwt-unix,lwt.unix,str
 CUSTOM = -custom
 
 all: depend $(EXEC)
@@ -13,15 +10,15 @@ all: depend $(EXEC)
 OBJS = $(SOURCES:.ml=.cmo)
 
 $(EXEC): $(OBJS)
-	$(CAMLC) $(CUSTOM) $(LIBS) -o $(EXEC) $(OBJS)
+	$(CAMLC) $(CUSTOM) -o $(EXEC) $(PACKAGES) -linkpkg $(OBJS)
 
 .SUFFIXES: .ml .mli .cmo .cmi
 
 %.cmo: %.ml
-	$(CAMLC) -c $<
+	$(CAMLC) -c $(PACKAGES) $<
 
 %.cmi: %.mli
-	$(CAMLC) -c $<
+	$(CAMLC) -c $(PACKAGES) $<
 
 doc: all
 	mkdir -p doc
