@@ -10,4 +10,3 @@ let string_of_assigns assigns =
     assigns ""
 
 let sat_str pstr = String.trim (string_of_assigns (sat_pstr pstr));;
-
