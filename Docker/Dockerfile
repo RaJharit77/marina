@@ -22,7 +22,10 @@ FROM python:3.9-alpine
 RUN pip install flask gunicorn
 
 # Copie de l'exécutable OCaml
-COPY --from=builder /app/marina /usr/local/bin/marina
+COPY --from=builder /app/marina /usr/bin/marina
+
+# Vérification que l'exécutable existe
+RUN ls -l /usr/bin/marina && chmod +x /usr/bin/marina
 
 # Copie du serveur web
 COPY server.py /app/server.py
