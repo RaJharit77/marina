@@ -21,10 +21,11 @@ RUN pip install flask gunicorn
 
 # Copier l'application compilée depuis l'étape de build
 COPY --from=build /app/marina /app/marina
-COPY app.py /app/app.py
+# CORRECTION : Utiliser server.py au lieu de app.py
+COPY server.py /app/server.py
 
 WORKDIR /app
-ENV FLASK_APP=app.py
+ENV FLASK_APP=server.py
 
 EXPOSE 5000
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "server:app"]
