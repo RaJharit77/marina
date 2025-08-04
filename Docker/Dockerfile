@@ -1,18 +1,20 @@
 FROM ocaml/opam:ubuntu-22.04-ocaml-4.14
 
-# Install dependencies
+# Installer les dépendances système
 RUN sudo apt-get update && \
     sudo apt-get install -y python3-pip python3-venv
 
-# Configure project
+# Configurer le projet
 WORKDIR /app
 COPY . .
 
-# Build OCaml project
-RUN opam install ocamlfind ounit2 && \
+# Configurer l'environnement OPAM et compiler
+RUN opam init -a --disable-sandboxing && \
+    opam install -y ocamlfind ounit2 && \
+    eval $(opam env) && \
     make
 
-# Set up Python environment
+# Configurer l'environnement Python
 RUN python3 -m venv venv && \
     . venv/bin/activate && \
     pip install flask gunicorn
