@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify # type: ignore
 import subprocess
-import shlex
 import os
 
 app = Flask(__name__)
@@ -16,7 +15,7 @@ def solve_sat():
     
     prop_str = data['prop']
     try:
-        # Exécuter le solveur SAT
+        # Exécuter le solveur SAT sans shlex.quote
         result = subprocess.run(
             ['./marina', prop_str],
             capture_output=True,

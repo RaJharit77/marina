@@ -1,5 +1,8 @@
 FROM ocaml/opam:ubuntu-22.04-ocaml-4.14 AS build
 
+# Définir le répertoire de travail
+WORKDIR /app
+
 # Installer les dépendances système
 RUN sudo apt-get update && \
     sudo apt-get install -y python3-pip python3-venv
@@ -19,16 +22,17 @@ FROM python:3.10-slim-bullseye
 # Installer les dépendances Python
 RUN pip install flask gunicorn
 
-# Copier l'application compilée depuis l'étape de build
-COPY --from=build /app/marina /app/marina
-
-RUN chmod +x /app/marina
-
-# CORRECTION : Utiliser server.py au lieu de app.py
-COPY server.py /app/server.py
-
+# Créer le répertoire de travail
 WORKDIR /app
+
+# Copier l'application compilée depuis l'étape de build
+COPY --from=build /app/marina .
+COPY server.py .
+
+# Rendre le binaire exécutable
+RUN chmod +x marina
+
 ENV FLASK_APP=server.py
 
 EXPOSE 5000
-CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "server:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "server:app"]
