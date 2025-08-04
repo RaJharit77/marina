@@ -1,24 +1,29 @@
-FROM ocaml/opam:ubuntu-22.04-ocaml-4.14
+FROM ocaml/opam:ubuntu-22.04-ocaml-4.14 AS build
 
 # Installer les dépendances système
 RUN sudo apt-get update && \
     sudo apt-get install -y python3-pip python3-venv
 
-# Configurer le projet
-WORKDIR /app
-COPY . .
+# Copier uniquement les fichiers nécessaires pour la construction
+COPY Makefile my.ml my.mli prop.ml prop.mli sat_ifexpr.ml sat_ifexpr.mli marina.ml marina.mli main.ml ./
 
-# Configurer l'environnement OPAM et compiler
+# Construire l'application
 RUN opam init -a --disable-sandboxing && \
     opam install -y ocamlfind ounit2 && \
     eval $(opam env) && \
     make
 
-# Configurer l'environnement Python
-RUN python3 -m venv venv && \
-    . venv/bin/activate && \
-    pip install flask gunicorn
+# Étape finale
+FROM python:3.10-slim-bullseye
 
+# Installer les dépendances Python
+RUN pip install flask gunicorn
+
+# Copier l'application compilée depuis l'étape de build
+COPY --from=build /app/marina /app/marina
+COPY app.py /app/app.py
+
+WORKDIR /app
 ENV FLASK_APP=app.py
 
 EXPOSE 5000
