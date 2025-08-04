@@ -21,6 +21,9 @@ RUN pip install flask gunicorn
 
 # Copier l'application compilée depuis l'étape de build
 COPY --from=build /app/marina /app/marina
+
+RUN chmod +x /app/marina
+
 # CORRECTION : Utiliser server.py au lieu de app.py
 COPY server.py /app/server.py
 
