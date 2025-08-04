@@ -4,3 +4,8 @@ _build
 *.cm[io]
 *.o
 .depend
+*.cmo
+*.cmi
+marina
+test
+doc
