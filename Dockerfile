@@ -19,6 +19,9 @@ RUN opam init -a --disable-sandboxing && \
 # Rendre le binaire OCaml exécutable
 RUN chmod +x ./marina
 
+# Vérifier que le binaire a été créé correctement
+RUN ls -l ./marina && file ./marina
+
 # Installer Flask et Gunicorn dans ~/.local
 RUN python3 -m pip install --upgrade pip && \
     python3 -m pip install --user flask gunicorn
