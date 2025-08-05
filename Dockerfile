@@ -2,7 +2,7 @@ FROM ocaml/opam:ubuntu-22.04-ocaml-4.14
 
 # Installer les dépendances système
 RUN sudo apt-get update && \
-    sudo apt-get install -y python3 python3-pip python3-venv make
+    sudo apt-get install -y python3 python3-pip python3-venv make file
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -19,8 +19,8 @@ RUN opam init -a --disable-sandboxing && \
 # Rendre le binaire OCaml exécutable
 RUN chmod +x ./marina
 
-# Vérifier que le binaire a été créé correctement
-RUN ls -l ./marina && file ./marina
+# Vérifier que le binaire OCaml est bien présent
+RUN ls -l ./marina
 
 # Installer Flask et Gunicorn dans ~/.local
 RUN python3 -m pip install --upgrade pip && \
