@@ -9,3 +9,15 @@ _build
 marina
 test
 doc
+venv/
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+*.DS_Store
