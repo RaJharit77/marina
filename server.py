@@ -1,11 +1,8 @@
-from flask import Flask, request, jsonify # type: ignore
+from flask import Flask, request, jsonify
 import subprocess
 import os
 
 app = Flask(__name__)
-
-# Obtenir le port de Render.com ou utiliser 5000 par défaut
-port = int(os.environ.get("PORT", 5000))
 
 @app.route('/marina', methods=['POST'])
 def solve_sat():
@@ -15,7 +12,6 @@ def solve_sat():
     
     prop_str = data['prop']
     try:
-        # Exécuter le solveur SAT sans shlex.quote
         result = subprocess.run(
             ['./marina', prop_str],
             capture_output=True,
@@ -37,4 +33,5 @@ def health_check():
     return "SAT solver service is operational. Use POST /marina with {\"prop\": \"your_formula\"}"
 
 if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
