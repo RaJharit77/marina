@@ -4,6 +4,18 @@ import os
 
 app = Flask(__name__)
 
+@app.route('/')
+def index():
+    return "Welcome to the SAT Solver Service! Use /marina for SAT solving."
+
+@app.route('/marina', methods=['GET'])
+def get_marina_info():
+    return jsonify({
+        "name": "Marina SAT Solver",
+        "version": "1.0.0",
+        "description": "A simple SAT solver service using Marina."
+    })
+
 @app.route('/marina', methods=['POST'])
 def solve_sat():
     data = request.get_json()
